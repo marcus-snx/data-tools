@@ -10,6 +10,7 @@ st.set_page_config(
 )
 
 # set the API
+@st.cache_resource
 def load_api():
     logging.warn("Loading API in main")
     return SynthetixAPI(db_config=get_db_config(streamlit=True))
