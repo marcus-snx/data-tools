@@ -11,7 +11,7 @@ st.set_page_config(
 
 # set the API
 def load_api():
-    logging.error("Loading API in main")
+    logging.warn("Loading API in main")
     return SynthetixAPI(db_config=get_db_config(streamlit=True))
 
 st.session_state.api = load_api()
