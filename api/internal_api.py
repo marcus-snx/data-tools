@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 from typing import Dict, Any, Generator
 from dotenv import load_dotenv
+import logging
 
 
 def get_db_config(streamlit=True):
@@ -51,17 +52,17 @@ class SynthetixAPI:
         Args:
             environment (str): The environment to query data for ('prod' or 'dev')
         """
-        print("Setting up API...")
+        logging.info("Setting up API...")
         self.environment = environment
         self.db_config = get_db_config(streamlit)
         self.engine = self._create_engine()
         self.Session = sessionmaker(bind=self.engine)
         SynthetixAPI.num_of_instances += 1
-        print(f"Num. of APIs running: {SynthetixAPI.num_of_instances}")
+        logging.info(f"Num. of APIs running: {SynthetixAPI.num_of_instances}")
 
     def _create_engine(self):
         """Create and return a database engine with connection pooling."""
-        print("Creating engine...")
+        logging.info("Creating engine...")
         connection_string = f"postgresql://{self.db_config['user']}:{self.db_config['password']}@{self.db_config['host']}:{self.db_config['port']}/{self.db_config['dbname']}"
         return sqlalchemy.create_engine(connection_string, pool_size=5, max_overflow=10)
 
@@ -76,7 +77,7 @@ class SynthetixAPI:
         self,
     ) -> Generator[sqlalchemy.engine.base.Connection, None, None]:
         """Context manager for database connections."""
-        print("Creating a connection...")
+        logging.info("Creating a connection...")
         connection = self.engine.connect()
         try:
             yield connection
@@ -112,6 +113,6 @@ class SynthetixAPI:
         WHERE ts >= '{start_date}' and ts <= '{end_date}'
         ORDER BY ts
         """
-        print("Running query...")
+        logging.info("Running query...")
         with self.get_connection() as conn:
             return pd.read_sql_query(query, conn)
