@@ -1,6 +1,7 @@
 # path setup
 import streamlit as st
 from api.internal_api import SynthetixAPI, get_db_config
+import logging
 
 st.set_page_config(
     page_title="Synthetix Dashboards",
@@ -10,6 +11,7 @@ st.set_page_config(
 
 # set the API
 def load_api():
+    logging.error("Loading API in main")
     return SynthetixAPI(db_config=get_db_config(streamlit=True))
 
 st.session_state.api = load_api()
