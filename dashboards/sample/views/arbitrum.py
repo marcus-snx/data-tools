@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime
 from dashboards.utils.charts import chart_bars
+import logging
 
 st.markdown("# Arbitrum")
 
